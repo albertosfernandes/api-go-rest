@@ -1,7 +1,13 @@
-FROM golang:1.21 AS build
-WORKDIR /api-go-rest
-COPY * ./
-RUN go build -o /api-go-rest
+FROM golang:1.21
+WORKDIR /usr/src/app
+
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+
+COPY . .
+RUN go build -v -o /usr/local/bin/api ./
+
 EXPOSE 8000
 
-CMD ["/api-go-rest"]ping www.google.
+CMD ["api"]
