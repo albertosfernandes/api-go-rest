@@ -19,6 +19,6 @@ func main() {
 
 	database.Dbconnect()
 
-	println("Iniciando servidor...")
+	println("Servidor inicializado, ouvindo em :8000")
 	routes.HandleRequest()
 }

@@ -14,9 +14,8 @@ var (
 )
 
 func Dbconnect() {
-	string := "*:*@123@tcp(192.168.15.111:3306)/asf?charset=utf8mb4&parseTime=True"
-
-	DB, err = gorm.Open(mysql.Open(string), &gorm.Config{})
+	var connectionString = fmt.Spintf("%s:%s@tcp(%s)/%s", os.Getenv("DB_USUARIO"), os.Getenv("DB_SENHA"), os.Getenv("DB_HOST"), os.Getenv("DB_DATABASE"))
+	DB, err = gorm.Open(mysql.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		panic("Falha na conexão com o banco de dados: " + err.Error())
 	}
