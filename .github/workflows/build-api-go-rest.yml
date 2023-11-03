@@ -26,7 +26,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Atualize o pod com nova imagem
-        run: kubectl create -f pod-api.yml
+        run: kubectl run api-go-rest --image=albertosouzafernandes/api-go-rest:v1.2 --port=8000  --env="DB_USUARIO=${{secrets.DB_USUARIO}}" --env="DB_SENHA=${{secrets.DB_SENHA}}" --env="DB_HOST=${{secrets.DB_HOST}}" --env="DB_DATABASE=${{secrets.DB_DATABASE}}" 
           
 
       
