@@ -7,16 +7,13 @@ on:
 jobs:
   ci-api-go-rest:
     runs-on: ubuntu-latest
-
     steps:
-
       - uses: actions/checkout@v4.1.1
       - name: Docker login
         uses: docker/login-action@v3.0.0
         with:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
-
       - name: Build and push Docker Hub
         uses: docker/build-push-action@v5.0.0
         with:
@@ -24,6 +21,12 @@ jobs:
           push: true
           tags: |
             albertosouzafernandes/api-go-rest:latest
+
+  cd-api-go-rest:
+    runs-on: self-hosted
+    steps:
+      - name: Atualize o pod com nova imagem
+        run: kubectl create -f pod-api.yml
           
 
       
