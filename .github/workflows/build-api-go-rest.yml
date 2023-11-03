@@ -20,7 +20,7 @@ jobs:
           context: .
           push: true
           tags: |
-            albertosouzafernandes/api-go-rest:latest
+            albertosouzafernandes/api-go-rest:v1.2
 
   cd-api-go-rest:
     runs-on: self-hosted
