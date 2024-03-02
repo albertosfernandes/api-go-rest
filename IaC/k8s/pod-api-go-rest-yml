@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Por
+metadata:
+  name: api-go-rest
+  labels:
+    app: api-go-rest
+spec:
+  containers:
+    - name: api-go-rest
+      image: albertosouzafernandes/api-go-rest:v1.2
+      env:
+        - name: DB_USUARIO
+          value: {{secrets.DB_USUARIO}}
+        - name: DB_SENHA
+          value: {{secrets.DB_SENHA}}
+        - name: DB_HOST
+          value: {{secrets.DB_HOST}}
+        - name: DB_DATABASE
+          value: {{secrets.DB_DATABASE}}
+      ports:
+        - containerPort: 8000
