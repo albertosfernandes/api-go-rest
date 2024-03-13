@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/albertosfernandes/api-go-rest/controllers"
+	"github.com/gorilla/mux"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
@@ -59,19 +60,28 @@ func HandleRequest() (err error) {
 }
 
 func newHTTPHandler() http.Handler {
-	mux := http.NewServeMux()
+	//otel_mux := http.NewServeMux()
+	r := mux.NewRouter()
 
 	// handleFunc is a replacement for mux.HandleFunc
 	// which enriches the handler's HTTP instrumentation with the pattern as the http.route.
-	handleFunc := func(pattern string, handlerFunc func(http.ResponseWriter, *http.Request)) {
-		// Configure the "http.route" for the HTTP instrumentation.
-		handler := otelhttp.WithRouteTag(pattern, http.HandlerFunc(handlerFunc))
-		mux.Handle(pattern, handler)
-	}
+	// handleFunc := func(pattern string, handlerFunc func(http.ResponseWriter, *http.Request)) {
+	// 	// Configure the "http.route" for the HTTP instrumentation.
+	// 	handler := otelhttp.WithRouteTag(pattern, http.HandlerFunc(handlerFunc))
+	// 	otel_mux.Handle(pattern, handler)
+	// }
+
+	//register Routes
+	r.HandleFunc("/", controllers.Home)
+	r.HandleFunc("/api/vms", controllers.GetVms).Methods("Get")
+	r.HandleFunc("/api/vm/{id}", controllers.GetVm).Methods("Get")
+	r.HandleFunc("/api/vm", controllers.Postvm).Methods("Post")
+	r.HandleFunc("/api/vm/{id}", controllers.Deletevm).Methods("Delete")
+	r.HandleFunc("/api/vm/{id}", controllers.Putvm).Methods("Put")
 
 	// Register handlers.
-	handleFunc("/", controllers.Home)
-	handleFunc("/api/vms", controllers.GetVms)
+	// handleFunc("/", controllers.Home)
+	// handleFunc("/api/vms", controllers.GetVms)
 	// handleFunc("/api/vm/{id}", controllers.GetVm)
 	// handleFunc("/api/vm", controllers.Postvm)
 	// handleFunc("/api/vm/{id}", controllers.Deletevm)
@@ -88,6 +98,6 @@ func newHTTPHandler() http.Handler {
 	// handleFunc("/api/storage/{id}", controllers.PutStorage)
 
 	// Add HTTP instrumentation for the whole server.
-	handler := otelhttp.NewHandler(mux, "/")
+	handler := otelhttp.NewHandler(r, "/")
 	return handler
 }
