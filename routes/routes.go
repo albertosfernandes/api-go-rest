@@ -9,6 +9,7 @@ import (
 )
 
 func HandleRequest() {
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", controllers.Home)
 	r.HandleFunc("/api/vms", controllers.GetVms).Methods("Get")
