@@ -6,6 +6,7 @@ import (
 
 	"github.com/albertosfernandes/api-go-rest/controllers"
 	"github.com/gorilla/mux"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 func HandleRequest() {
@@ -26,5 +27,6 @@ func HandleRequest() {
 	r.HandleFunc("/api/storage", controllers.PostStorage).Methods("Post")
 	r.HandleFunc("/api/storage/{id}", controllers.DeleteStorage).Methods("Delete")
 	r.HandleFunc("/api/storage/{id}", controllers.PutStorage).Methods("Put")
-	log.Fatal(http.ListenAndServe(":8000", r))
+	otelhttpHandler := otelhttp.NewHandler(r, "http.server")
+	log.Fatal(http.ListenAndServe(":8000", otelhttpHandler))
 }
